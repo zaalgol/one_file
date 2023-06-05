@@ -18,7 +18,7 @@ OUTPUT_MODEL_PATH = "output/model_output.pkl"
 OUTPUT_DATA_PATH = f"output/dataset_with_predictions_classifier_{datetime.now().strftime('%m-%d-%Y_%H-%M-%S')}.csv"
 TARGET_COL = "survived"
 CAT_COLS = ["sex", "cabin"]
-NUM_COLS = ["age", "fare"]
+NUM_COLS = ["Pclass", "age", "SibSp", "Parch", "Fare"]
 
 class XGBoostClassifier:
     def __init__(self, csv_path=CSV_PATH, target_col=TARGET_COL, cat_cols=CAT_COLS, num_cols=NUM_COLS,
@@ -41,6 +41,14 @@ class XGBoostClassifier:
 
     def load_data(self):
         self.df = pd.read_csv(self.csv_path)
+
+    # def clean_data(self):
+    #     pass
+    #
+    # def feature_engineering(self):
+    #     pass
+
+    def split_data(self):
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.df[self.cat_cols + self.num_cols],
                                                                                 self.df[self.target_col],
                                                                                 test_size=TEST_SIZE, random_state=RANDOM_STATE)
@@ -120,6 +128,9 @@ def main():
 
     # Load the data
     classifier.load_data()
+
+    # split to train and test
+    classifier.split_data()
 
     # Train the classifier
     classifier.train()
